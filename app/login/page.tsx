@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 
-import { createWalletClient, custom, http } from 'viem'
+import { createWalletClient, custom } from 'viem'
 import { sepolia } from 'viem/chains'
 
 export default function Login() {
@@ -24,19 +24,16 @@ export default function Login() {
   }
 
   const signup = async () => {
-    const res = await fetch('/api/v1/signup', {
+    await fetch('/api/v1/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        username: 'aaa',
-        password: 'bbb'
+        username: 'user-' + Date.now(),
+        password: 'password-' + Date.now()
       })
     })
-
-    const data = await res.json()
-    console.log(data)
   }
 
   return (
