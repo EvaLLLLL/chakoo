@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "dev": "concurrently \"pnpm --filter ui dev\" \"pnpm --filter app dev\"",
-    "build": "pnpm --filter app build",
+    "build": "pnpm --filter ui build && pnpm --filter app build",
     "preview": "pnpm --filter app preview",
     "lint": "pnpm --filter app --filter ui lint"
   },
