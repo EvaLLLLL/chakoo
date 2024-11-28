@@ -2,9 +2,13 @@
   "name": "chakoo",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "pnpm --filter app dev",
+    "lint": "pnpm --filter app --filter packages/ui lint"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm run lint",
+    "commit-msg": "npx --no -- commitlint --edit"
   },
   "keywords": [],
   "author": "",
@@ -12,7 +16,6 @@
   "devDependencies": {
     "@commitlint/cli": "^19.6.0",
     "@commitlint/config-conventional": "^19.6.0",
-    "lint-staged": "^15.2.10",
     "simple-git-hooks": "^2.11.1"
   }
 }

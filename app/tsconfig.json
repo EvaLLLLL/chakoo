@@ -1,0 +1,6 @@
+{
+  "extends": "@repo/typescript-config/app.json",
+  "compilerOptions": {
+    "jsx": "react-jsx"
+  }
+}
