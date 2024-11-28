@@ -1,0 +1,6 @@
+{
+  "name": "@repo/tailwind-config",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "tailwind.config.js"
+}

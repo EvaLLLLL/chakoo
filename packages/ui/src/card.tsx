@@ -1,3 +1,3 @@
-export const Card = () => {
-  return <div>Card</div>
+export function Card() {
+  return <div className="text-secondary">hello</div>
 }

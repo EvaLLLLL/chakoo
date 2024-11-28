@@ -7,6 +7,7 @@ import {
   useSwitchChain
 } from 'wagmi'
 import { injected } from 'wagmi/connectors'
+import { Card } from '@repo/ui'
 
 function App() {
   const chainId = useChainId()
@@ -17,11 +18,12 @@ function App() {
   const { data: ensName } = useEnsName({ address })
 
   return (
-    <div>
+    <div className="flex items-center justify-center flex-col">
+      <Card />
       {isConnecting ? (
         'connecting'
       ) : (
-        <div>
+        <div className="text-primary">
           <div>chainId: {chainId}</div>
           <div>status: {isConnected ? 'connected' : 'not connected'}</div>
           <div>address: {address || '-'}</div>
