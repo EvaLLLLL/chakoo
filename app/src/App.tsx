@@ -7,7 +7,8 @@ import {
   useSwitchChain
 } from 'wagmi'
 import { injected } from 'wagmi/connectors'
-import { Card } from '@repo/ui'
+import { Button } from '@repo/ui'
+import { cn } from '@repo/lib'
 
 function App() {
   const chainId = useChainId()
@@ -18,8 +19,10 @@ function App() {
   const { data: ensName } = useEnsName({ address })
 
   return (
-    <div className="flex items-center justify-center flex-col">
-      <Card />
+    <div
+      className={cn('flex items-center justify-center flex-col', {
+        border: true
+      })}>
       {isConnecting ? (
         'connecting'
       ) : (
@@ -31,21 +34,24 @@ function App() {
         </div>
       )}
       {!isConnecting && !isConnected && (
-        <button onClick={() => connect({ connector: injected() })}>
+        <Button onClick={() => connect({ connector: injected() })}>
           connect
-        </button>
+        </Button>
       )}
       {!isConnecting && isConnected && (
-        <button onClick={() => disconnect()}>disconnect</button>
+        <Button onClick={() => disconnect()}>disconnect</Button>
       )}
       <div>
         {chains.map((chain) => (
           <div key={chain.id}>
             <span>{chain.id}</span>
             <span>{chain.name}</span>
-            <button onClick={() => switchChain({ chainId: chain.id })}>
+            <Button
+              className="disabled:text-gray-500"
+              disabled={chainId === chain.id}
+              onClick={() => switchChain({ chainId: chain.id })}>
               switch to {chain.name}
-            </button>
+            </Button>
           </div>
         ))}
       </div>

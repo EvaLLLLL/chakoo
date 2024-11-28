@@ -1,14 +1,13 @@
-import { ReactNode } from 'react'
+import { cn } from '@repo/lib'
 
-interface ButtonProps {
-  children: ReactNode
-  className?: string
-}
-
-export const Button = ({ children }: ButtonProps) => {
+export const Button = ({
+  className,
+  ...rest
+}: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
-    <button onClick={() => alert(`Hello from your monorepo app!`)}>
-      {children}
-    </button>
+    <button
+      className={cn('border-2 px-4 py-2 border-primary rounded-xl', className)}
+      {...rest}
+    />
   )
 }
