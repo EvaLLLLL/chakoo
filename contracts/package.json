@@ -3,7 +3,7 @@
   "scripts": {
     "compile": "hardhat compile",
     "test": "hardhat test",
-    "deploy": "hardhat ignition deploy ./ignition/modules/Lock.ts --network sepolia"
+    "deploy": "hardhat ignition deploy ./ignition/modules/token.ts --network sepolia"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.8",
@@ -12,5 +12,8 @@
     "dotenv": "^16.4.5",
     "hardhat": "^2.22.16",
     "viem": "2.x"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.1.0"
   }
 }
