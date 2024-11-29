@@ -6,10 +6,10 @@ import {
 } from 'wagmi/codegen'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// TokenContract
+// Token
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const tokenContractAbi = [
+export const tokenAbi = [
   {
     type: 'constructor',
     inputs: [
@@ -267,246 +267,235 @@ export const tokenContractAbi = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link tokenContractAbi}__
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tokenAbi}__
  */
-export const useReadTokenContract = /*#__PURE__*/ createUseReadContract({
-  abi: tokenContractAbi,
+export const useReadToken = /*#__PURE__*/ createUseReadContract({
+  abi: tokenAbi,
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link tokenContractAbi}__ and `functionName` set to `"allowance"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tokenAbi}__ and `functionName` set to `"allowance"`
  */
-export const useReadTokenContractAllowance =
-  /*#__PURE__*/ createUseReadContract({
-    abi: tokenContractAbi,
-    functionName: 'allowance',
-  })
+export const useReadTokenAllowance = /*#__PURE__*/ createUseReadContract({
+  abi: tokenAbi,
+  functionName: 'allowance',
+})
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link tokenContractAbi}__ and `functionName` set to `"balanceOf"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tokenAbi}__ and `functionName` set to `"balanceOf"`
  */
-export const useReadTokenContractBalanceOf =
-  /*#__PURE__*/ createUseReadContract({
-    abi: tokenContractAbi,
-    functionName: 'balanceOf',
-  })
+export const useReadTokenBalanceOf = /*#__PURE__*/ createUseReadContract({
+  abi: tokenAbi,
+  functionName: 'balanceOf',
+})
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link tokenContractAbi}__ and `functionName` set to `"cap"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tokenAbi}__ and `functionName` set to `"cap"`
  */
-export const useReadTokenContractCap = /*#__PURE__*/ createUseReadContract({
-  abi: tokenContractAbi,
+export const useReadTokenCap = /*#__PURE__*/ createUseReadContract({
+  abi: tokenAbi,
   functionName: 'cap',
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link tokenContractAbi}__ and `functionName` set to `"decimals"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tokenAbi}__ and `functionName` set to `"decimals"`
  */
-export const useReadTokenContractDecimals = /*#__PURE__*/ createUseReadContract(
-  { abi: tokenContractAbi, functionName: 'decimals' },
-)
+export const useReadTokenDecimals = /*#__PURE__*/ createUseReadContract({
+  abi: tokenAbi,
+  functionName: 'decimals',
+})
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link tokenContractAbi}__ and `functionName` set to `"name"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tokenAbi}__ and `functionName` set to `"name"`
  */
-export const useReadTokenContractName = /*#__PURE__*/ createUseReadContract({
-  abi: tokenContractAbi,
+export const useReadTokenName = /*#__PURE__*/ createUseReadContract({
+  abi: tokenAbi,
   functionName: 'name',
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link tokenContractAbi}__ and `functionName` set to `"owner"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tokenAbi}__ and `functionName` set to `"owner"`
  */
-export const useReadTokenContractOwner = /*#__PURE__*/ createUseReadContract({
-  abi: tokenContractAbi,
+export const useReadTokenOwner = /*#__PURE__*/ createUseReadContract({
+  abi: tokenAbi,
   functionName: 'owner',
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link tokenContractAbi}__ and `functionName` set to `"symbol"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tokenAbi}__ and `functionName` set to `"symbol"`
  */
-export const useReadTokenContractSymbol = /*#__PURE__*/ createUseReadContract({
-  abi: tokenContractAbi,
+export const useReadTokenSymbol = /*#__PURE__*/ createUseReadContract({
+  abi: tokenAbi,
   functionName: 'symbol',
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link tokenContractAbi}__ and `functionName` set to `"totalSupply"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tokenAbi}__ and `functionName` set to `"totalSupply"`
  */
-export const useReadTokenContractTotalSupply =
-  /*#__PURE__*/ createUseReadContract({
-    abi: tokenContractAbi,
-    functionName: 'totalSupply',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tokenContractAbi}__
- */
-export const useWriteTokenContract = /*#__PURE__*/ createUseWriteContract({
-  abi: tokenContractAbi,
+export const useReadTokenTotalSupply = /*#__PURE__*/ createUseReadContract({
+  abi: tokenAbi,
+  functionName: 'totalSupply',
 })
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tokenContractAbi}__ and `functionName` set to `"approve"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tokenAbi}__
  */
-export const useWriteTokenContractApprove =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: tokenContractAbi,
-    functionName: 'approve',
-  })
+export const useWriteToken = /*#__PURE__*/ createUseWriteContract({
+  abi: tokenAbi,
+})
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tokenContractAbi}__ and `functionName` set to `"burn"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tokenAbi}__ and `functionName` set to `"approve"`
  */
-export const useWriteTokenContractBurn = /*#__PURE__*/ createUseWriteContract({
-  abi: tokenContractAbi,
+export const useWriteTokenApprove = /*#__PURE__*/ createUseWriteContract({
+  abi: tokenAbi,
+  functionName: 'approve',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tokenAbi}__ and `functionName` set to `"burn"`
+ */
+export const useWriteTokenBurn = /*#__PURE__*/ createUseWriteContract({
+  abi: tokenAbi,
   functionName: 'burn',
 })
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tokenContractAbi}__ and `functionName` set to `"burnFrom"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tokenAbi}__ and `functionName` set to `"burnFrom"`
  */
-export const useWriteTokenContractBurnFrom =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: tokenContractAbi,
-    functionName: 'burnFrom',
-  })
+export const useWriteTokenBurnFrom = /*#__PURE__*/ createUseWriteContract({
+  abi: tokenAbi,
+  functionName: 'burnFrom',
+})
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tokenContractAbi}__ and `functionName` set to `"renounceOwnership"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tokenAbi}__ and `functionName` set to `"renounceOwnership"`
  */
-export const useWriteTokenContractRenounceOwnership =
+export const useWriteTokenRenounceOwnership =
   /*#__PURE__*/ createUseWriteContract({
-    abi: tokenContractAbi,
+    abi: tokenAbi,
     functionName: 'renounceOwnership',
   })
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tokenContractAbi}__ and `functionName` set to `"transfer"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tokenAbi}__ and `functionName` set to `"transfer"`
  */
-export const useWriteTokenContractTransfer =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: tokenContractAbi,
-    functionName: 'transfer',
-  })
+export const useWriteTokenTransfer = /*#__PURE__*/ createUseWriteContract({
+  abi: tokenAbi,
+  functionName: 'transfer',
+})
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tokenContractAbi}__ and `functionName` set to `"transferFrom"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tokenAbi}__ and `functionName` set to `"transferFrom"`
  */
-export const useWriteTokenContractTransferFrom =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: tokenContractAbi,
-    functionName: 'transferFrom',
-  })
+export const useWriteTokenTransferFrom = /*#__PURE__*/ createUseWriteContract({
+  abi: tokenAbi,
+  functionName: 'transferFrom',
+})
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tokenContractAbi}__ and `functionName` set to `"transferOwnership"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tokenAbi}__ and `functionName` set to `"transferOwnership"`
  */
-export const useWriteTokenContractTransferOwnership =
+export const useWriteTokenTransferOwnership =
   /*#__PURE__*/ createUseWriteContract({
-    abi: tokenContractAbi,
+    abi: tokenAbi,
     functionName: 'transferOwnership',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tokenContractAbi}__
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tokenAbi}__
  */
-export const useSimulateTokenContract = /*#__PURE__*/ createUseSimulateContract(
-  { abi: tokenContractAbi },
+export const useSimulateToken = /*#__PURE__*/ createUseSimulateContract({
+  abi: tokenAbi,
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tokenAbi}__ and `functionName` set to `"approve"`
+ */
+export const useSimulateTokenApprove = /*#__PURE__*/ createUseSimulateContract({
+  abi: tokenAbi,
+  functionName: 'approve',
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tokenAbi}__ and `functionName` set to `"burn"`
+ */
+export const useSimulateTokenBurn = /*#__PURE__*/ createUseSimulateContract({
+  abi: tokenAbi,
+  functionName: 'burn',
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tokenAbi}__ and `functionName` set to `"burnFrom"`
+ */
+export const useSimulateTokenBurnFrom = /*#__PURE__*/ createUseSimulateContract(
+  { abi: tokenAbi, functionName: 'burnFrom' },
 )
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tokenContractAbi}__ and `functionName` set to `"approve"`
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tokenAbi}__ and `functionName` set to `"renounceOwnership"`
  */
-export const useSimulateTokenContractApprove =
+export const useSimulateTokenRenounceOwnership =
   /*#__PURE__*/ createUseSimulateContract({
-    abi: tokenContractAbi,
-    functionName: 'approve',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tokenContractAbi}__ and `functionName` set to `"burn"`
- */
-export const useSimulateTokenContractBurn =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: tokenContractAbi,
-    functionName: 'burn',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tokenContractAbi}__ and `functionName` set to `"burnFrom"`
- */
-export const useSimulateTokenContractBurnFrom =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: tokenContractAbi,
-    functionName: 'burnFrom',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tokenContractAbi}__ and `functionName` set to `"renounceOwnership"`
- */
-export const useSimulateTokenContractRenounceOwnership =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: tokenContractAbi,
+    abi: tokenAbi,
     functionName: 'renounceOwnership',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tokenContractAbi}__ and `functionName` set to `"transfer"`
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tokenAbi}__ and `functionName` set to `"transfer"`
  */
-export const useSimulateTokenContractTransfer =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: tokenContractAbi,
-    functionName: 'transfer',
-  })
+export const useSimulateTokenTransfer = /*#__PURE__*/ createUseSimulateContract(
+  { abi: tokenAbi, functionName: 'transfer' },
+)
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tokenContractAbi}__ and `functionName` set to `"transferFrom"`
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tokenAbi}__ and `functionName` set to `"transferFrom"`
  */
-export const useSimulateTokenContractTransferFrom =
+export const useSimulateTokenTransferFrom =
   /*#__PURE__*/ createUseSimulateContract({
-    abi: tokenContractAbi,
+    abi: tokenAbi,
     functionName: 'transferFrom',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tokenContractAbi}__ and `functionName` set to `"transferOwnership"`
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tokenAbi}__ and `functionName` set to `"transferOwnership"`
  */
-export const useSimulateTokenContractTransferOwnership =
+export const useSimulateTokenTransferOwnership =
   /*#__PURE__*/ createUseSimulateContract({
-    abi: tokenContractAbi,
+    abi: tokenAbi,
     functionName: 'transferOwnership',
   })
 
 /**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tokenContractAbi}__
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tokenAbi}__
  */
-export const useWatchTokenContractEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({ abi: tokenContractAbi })
+export const useWatchTokenEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: tokenAbi,
+})
 
 /**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tokenContractAbi}__ and `eventName` set to `"Approval"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tokenAbi}__ and `eventName` set to `"Approval"`
  */
-export const useWatchTokenContractApprovalEvent =
+export const useWatchTokenApprovalEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
-    abi: tokenContractAbi,
+    abi: tokenAbi,
     eventName: 'Approval',
   })
 
 /**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tokenContractAbi}__ and `eventName` set to `"OwnershipTransferred"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tokenAbi}__ and `eventName` set to `"OwnershipTransferred"`
  */
-export const useWatchTokenContractOwnershipTransferredEvent =
+export const useWatchTokenOwnershipTransferredEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
-    abi: tokenContractAbi,
+    abi: tokenAbi,
     eventName: 'OwnershipTransferred',
   })
 
 /**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tokenContractAbi}__ and `eventName` set to `"Transfer"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tokenAbi}__ and `eventName` set to `"Transfer"`
  */
-export const useWatchTokenContractTransferEvent =
+export const useWatchTokenTransferEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
-    abi: tokenContractAbi,
+    abi: tokenAbi,
     eventName: 'Transfer',
   })

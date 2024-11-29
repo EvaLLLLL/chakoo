@@ -31,15 +31,17 @@ export async function generateConfig() {
   });
 
   return Object.entries(abiInfo).map(([contractName, abi]) => ({
-    out: `hooks/${contractName}.ts`,
+    out: `hooks/contracts/${contractName}.ts`,
     contracts: [{
-      name: `${contractName}Contract`,
+      name: contractName,
       abi: abi
     }],
     plugins: [react()]
   }));
 }
 
-const config = await generateConfig();
 
-export default defineConfig(config);
+export default defineConfig(async () => {
+  const config = await generateConfig();
+  return config
+});
