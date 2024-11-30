@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { CONTRACT_ADDRESSES } from '../config/address'
-import { storageAbi, useReadStorageFetchAll } from '../hooks/contracts/storage'
+import { CONTRACT_ADDRESSES } from '@/config/address'
+import { storageAbi, useReadStorageFetchAll } from '@/hooks/contracts/storage'
 import { useAccount, useConfig, useWriteContract } from 'wagmi'
 import { Button, Card, Status } from '@repo/ui'
 import { waitForTransactionReceipt } from 'wagmi/actions'

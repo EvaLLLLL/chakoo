@@ -4,10 +4,10 @@ import {
   useWaitForTransactionReceipt,
   useWriteContract
 } from 'wagmi'
-import { CONTRACT_ADDRESSES } from '../config/address'
-import { useReadTokenBalanceOf } from '../hooks/contracts/token'
+import { CONTRACT_ADDRESSES } from '@/config/address'
+import { useReadTokenBalanceOf } from '@/hooks/contracts/token'
 import { Address, formatEther, Hash, isHash } from 'viem'
-import { faucetAbi, useReadFaucetGetBalance } from '../hooks/contracts/faucet'
+import { faucetAbi, useReadFaucetGetBalance } from '@/hooks/contracts/faucet'
 import { useEffect, useState } from 'react'
 import { Button, Card, Status } from '@repo/ui'
 
