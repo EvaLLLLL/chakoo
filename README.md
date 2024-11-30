@@ -2,102 +2,65 @@
 
 # Chakoo
 
-Chakoo is a starter template for creating Web3 applications, designed to streamline the development process. It includes a complete frontend development setup, tooling configuration with ESLint, Prettier, Commitlint, and Simple Git Hooks, as well as style integration using Tailwind CSS and state management with React Query. On the smart contract side, it features a Hardhat setup with TypeScript, contract deployment configurations, and automated React Hooks generation based on compiled contract ABIs. By cloning this repository, you can skip the tedious setup process and dive straight into building your business logic.
+Chakoo is a Web3 application starter template that combines a complete frontend development setup with smart contract tooling. It lets you skip the tedious configuration process and focus directly on building your application.
 
-## TOC
+## Key Features
 
-- [Chakoo](#chakoo)
-  - [TOC](#toc)
-  - [Features](#features)
-  - [Project Structure](#project-structure)
-  - [Installation](#installation)
-  - [Development](#development)
-    - [Frontend](#frontend)
-    - [Generate React Hooks to Interact with Contracts](#generate-react-hooks-to-interact-with-contracts)
-    - [Smart Contracts](#smart-contracts)
-    - [Dockerizing application](#dockerizing-application)
-  - [License](#license)
-
-## Features
-
-- **Frontend Development**: React + TypeScript + Vite + Tailwind CSS
+- **Frontend Stack**: React + TypeScript + Vite + Tailwind CSS + React Query
 - **Web3 Integration**: Wagmi for wallet connection and contract interaction
-- **State Management**: React Query
 - **Smart Contracts**: Hardhat + Solidity
-- **Code Linting**: ESLint + Prettier
-- **Testing**: Comprehensive test suites for frontend and smart contracts
-- **Git Workflow**: Simple-git-hooks + Commit-lint
+- **Code Quality**: ESLint + Prettier + Commitlint + Simple Git Hooks
+- **Testing**: Comprehensive test suites for both frontend and contracts
 
 ## Project Structure
 
-This project utilizes [pnpm workspaces](https://pnpm.io/workspaces) for dependency and script management:
+Using [pnpm workspaces](https://pnpm.io/workspaces) for dependency management:
 
 ```
-.vscode
-  └─ Recommended extensions for VSCode users
-app
- ├─ src
- |   └─ components
- |      └─ WalletConnection.tsx
- |         └─ frontend connect / disconnect and switch chains
- |      └─ TokenTransaction.tsx
- |         └─ frontend request tokens from faucet
- |      └─ StorageCURD.tsx
- |         └─ onchain storage CURD
-contracts
- ├─ contracts
- |   └─ contracts
- |      └─ Token.sol
- |         └─ a simple token contract
- |      └─ Faucet.sol
- |         └─ a simple faucet contract
- |      └─ Storage.sol
- |         └─ a simple storage contract
- |      └─ Lock.sol
- |         └─ sample contract from hardhat
- ├─ ignition
- |   └─ hardhat deployment scripts
- ├─ test
- |   └─ contract tests
- └─ ui
-     └─ a custom shared ui component library
-packages
- ├─ lib
- |   └─ shared utils
- ├─ typescript-config
- |   └─ shared tsconfig
- ├─ eslint-config
- |   └─ shared eslint and prettier config
- ├─ tailwind-config
- |   └─ shared tailwind css config
- └─ ui
-     └─ a custom shared ui component library
+.vscode/          # VSCode recommended extensions
+app/              # Frontend application
+  └─ src/
+    └─ components/
+      ├─ WalletConnection.tsx  # Connect/disconnect wallet and switch chains
+      ├─ TokenTransaction.tsx  # Request tokens from faucet
+      └─ StorageCURD.tsx      # On-chain storage operations
+contracts/        # Smart contracts
+  ├─ contracts/
+  │  ├─ Token.sol    # Simple token contract
+  │  ├─ Faucet.sol   # Faucet contract
+  │  ├─ Storage.sol  # Storage contract
+  │  └─ Lock.sol     # Hardhat sample contract
+  ├─ ignition/       # Hardhat deployment scripts
+  └─ test/          # Contract tests
+packages/         # Shared packages
+  ├─ lib/           # Shared utilities
+  ├─ typescript-config/  # Shared tsconfig
+  ├─ eslint-config/     # Shared ESLint and Prettier config
+  ├─ tailwind-config/   # Shared Tailwind CSS config
+  └─ ui/               # Shared UI component library
 ```
 
-## Installation
+## Quick Start
+
+> [!NOTE]
+> This project uses the `pnpm workspace` feature to manage the monorepo. Please do not use other tools like npm or yarn.
 
 ```sh
 # Clone the repository
 git clone https://github.com/EvaLLLLL/chakoo
 
-# Install the dependencies
-# We use `pnpm workspace` feature to manage this monorepo, please use `pnpm` other than `npm` or `yarn`
+# Install dependencies (use pnpm)
 pnpm install
-```
 
-## Development
-
-### Frontend
-
-Start the frontend development server:
-
-```sh
+# Start development server
 pnpm run dev
 ```
 
-### Generate React Hooks to Interact with Contracts
+## Development Guide
 
-The following commands will automatically read Abis from `contracts/artifacts/contracts/[Module].sol/[Module].json`, and generate hooks into `app/src/contracts`, you can get more detailed information about `wagmi cli` [here](https://wagmi.sh/cli/why):
+### Contract Interaction
+
+Generate React hooks from contract ABIs:
 
 ```sh
 cd app
@@ -106,29 +69,28 @@ pnpm run generate
 
 ### Smart Contracts
 
-We use Hardhat for developing and testing smart contracts, and Hardhat Ignition for deploying them. You can find more detailed information about Hardhat [here](https://hardhat.org/).
-
 ```sh
 cd contracts
-# Start a local blockchain
+# Start local blockchain
 npx hardhat node
 
-# Test the contracts
+# Test contracts
 npx hardhat test
 
-# Deploy the contracts
+# Deploy contracts
 pnpm run deploy
 ```
 
-### Dockerizing application
+### Docker Deployment
 
 ```sh
-# Build pro
+# Build production
 docker compose build --no-cache
-# Start prod in detached mode
+
+# Start in detached mode
 docker-compose -f docker-compose.yml up -d
 ```
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+MIT License. See [LICENSE](LICENSE) for details.
