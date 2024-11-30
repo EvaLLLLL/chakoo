@@ -95,7 +95,10 @@ export const StorageCURD: React.FC = () => {
   };
 
   return (
-    <Card title="Contract CURD" className="col-span-2">
+    <Card
+      title="Contract CURD(Please connect to Sepolia)"
+      className="col-span-2"
+    >
       <div className="flex flex-col gap-y-4">
         <div className="flex items-center gap-x-2">
           <input

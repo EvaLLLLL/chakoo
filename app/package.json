@@ -4,12 +4,12 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "npx wagmi generate && vite",
-    "build": "npx wagmi generate && tsc -b && vite build",
+    "dev": "wagmi generate && vite",
+    "build": "wagmi generate && tsc -b && vite build",
     "lint": "eslint ./src vite.config.ts wagmi.config.ts",
     "preview": "vite preview",
     "lint:fix": "eslint ./src vite.config.ts wagmi.config.ts --fix",
-    "generate": "npx wagmi generate"
+    "generate": "wagmi generate"
   },
   "dependencies": {
     "@repo/ui": "workspace:*",

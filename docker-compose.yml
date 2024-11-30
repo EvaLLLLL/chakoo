@@ -1,0 +1,7 @@
+services:
+  chakoo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 80:80

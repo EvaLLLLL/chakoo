@@ -65,7 +65,7 @@ export const TokenTransaction: React.FC = () => {
   };
 
   return (
-    <Card title="Token Transaction">
+    <Card title="Token Transaction(Please connect to Sepolia)">
       <div className="flex flex-col gap-y-2 items-start">
         <div className="flex items-center gap-x-2">
           <span>

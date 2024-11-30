@@ -1,7 +1,16 @@
 {
   "name": "chakoo",
   "version": "0.1.0",
-  "description": "",
+  "author": "EvaLLLLL",
+  "description": "A Web3 starter template with frontend setup, tooling, Tailwind CSS, React Query, Hardhat, and auto-generated React hooks for smart contracts.",
+  "keywords": [
+    "Web3",
+    "Ethereum",
+    "React",
+    "Hardhat",
+    "Tailwind CSS",
+    "React Query"
+  ],
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "postinstall": "npx simple-git-hooks",
@@ -11,12 +20,11 @@
     "lint": "pnpm --filter app --filter ui lint",
     "lint:fix": "pnpm --filter app --filter ui lint:fix"
   },
+  "packageManager": "pnpm@9.11.0",
   "simple-git-hooks": {
     "pre-commit": "pnpm run lint",
     "commit-msg": "npx --no -- commitlint --edit"
   },
-  "keywords": [],
-  "author": "",
   "license": "MIT",
   "devDependencies": {
     "@commitlint/cli": "^19.6.0",
