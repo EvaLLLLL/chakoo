@@ -22,4 +22,8 @@ contract Token is ERC20Capped, ERC20Burnable, Ownable {
     ) internal virtual override(ERC20, ERC20Capped) {
         super._update(from, to, value);
     }
+
+    function mint(address to, uint256 amount) public onlyOwner {
+        _mint(to, amount);
+    }
 }

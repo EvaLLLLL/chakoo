@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract Faucet {
     IERC20 public token;
-    address payable owner;
+    address payable public owner;
 
     uint256 public withdrawAmount = 50 * (10 ** 18);
     uint256 public lockTime = 1 minutes;

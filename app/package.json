@@ -9,7 +9,7 @@
     "lint": "eslint ./src vite.config.ts wagmi.config.ts",
     "preview": "vite preview",
     "lint:fix": "eslint ./src vite.config.ts wagmi.config.ts --fix",
-    "generate": "wagmi generate"
+    "generate-hooks": "wagmi generate"
   },
   "dependencies": {
     "@repo/ui": "workspace:*",

@@ -79,7 +79,7 @@ pnpm run dev
 cd app
 
 # Generate React hooks from contract ABIs
-pnpm run generate
+pnpm run generate-hooks
 ```
 
 ### Smart Contracts
