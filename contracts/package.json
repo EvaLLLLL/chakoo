@@ -3,7 +3,7 @@
   "scripts": {
     "compile": "hardhat compile",
     "test": "hardhat test",
-    "deploy": "hardhat ignition deploy ./ignition/modules/token.ts --network sepolia"
+    "deploy": "hardhat ignition deploy ./ignition/modules/Storage.ts --network sepolia"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.8",

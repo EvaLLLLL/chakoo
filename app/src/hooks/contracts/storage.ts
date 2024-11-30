@@ -64,25 +64,11 @@ export const storageAbi = [
   {
     type: 'function',
     inputs: [],
-    name: 'getCount',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: '_owner', internalType: 'address', type: 'address' },
-      { name: '_id', internalType: 'uint256', type: 'uint256' },
+    name: 'fetchAll',
+    outputs: [
+      { name: '', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: '', internalType: 'string[]', type: 'string[]' },
     ],
-    name: 'getItemByOwner',
-    outputs: [{ name: '', internalType: 'string', type: 'string' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'getMyItems',
-    outputs: [{ name: '', internalType: 'string[]', type: 'string[]' }],
     stateMutability: 'view',
   },
   {
@@ -123,26 +109,11 @@ export const useReadStorage = /*#__PURE__*/ createUseReadContract({
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link storageAbi}__ and `functionName` set to `"getCount"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link storageAbi}__ and `functionName` set to `"fetchAll"`
  */
-export const useReadStorageGetCount = /*#__PURE__*/ createUseReadContract({
+export const useReadStorageFetchAll = /*#__PURE__*/ createUseReadContract({
   abi: storageAbi,
-  functionName: 'getCount',
-})
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link storageAbi}__ and `functionName` set to `"getItemByOwner"`
- */
-export const useReadStorageGetItemByOwner = /*#__PURE__*/ createUseReadContract(
-  { abi: storageAbi, functionName: 'getItemByOwner' },
-)
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link storageAbi}__ and `functionName` set to `"getMyItems"`
- */
-export const useReadStorageGetMyItems = /*#__PURE__*/ createUseReadContract({
-  abi: storageAbi,
-  functionName: 'getMyItems',
+  functionName: 'fetchAll',
 })
 
 /**

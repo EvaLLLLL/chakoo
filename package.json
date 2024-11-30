@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "",
   "scripts": {
-    "dev": "concurrently \"pnpm --filter ui dev\" \"pnpm --filter app dev\"",
+    "dev": "concurrently -n \"UI,APP\" -c \"blue,green\" \"pnpm --filter ui dev\" \"pnpm --filter app dev\"",
     "build": "pnpm --filter ui build && pnpm --filter app build",
     "preview": "pnpm --filter app preview",
     "lint": "pnpm --filter app --filter ui lint"

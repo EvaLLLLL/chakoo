@@ -3,12 +3,10 @@
 
 import { buildModule } from '@nomicfoundation/hardhat-ignition/modules'
 
-const TOKEN_ADDRESS = ''
+const Storage = buildModule('Storage', (m) => {
+  const store = m.contract('Storage')
 
-const FacetModule = buildModule('Faucet', (m) => {
-  const faucet = m.contract('FaucetModule', [TOKEN_ADDRESS])
-
-  return { faucet }
+  return { store }
 })
 
-export default FacetModule
+export default Storage

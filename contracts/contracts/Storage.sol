@@ -5,73 +5,62 @@ contract Storage {
     // Nested mapping: address -> (id -> value)
     mapping(address => mapping(uint256 => string)) private items;
     mapping(address => uint256) private userItemCount;
+    mapping(address => mapping(uint256 => bool)) private itemExists;
 
-    // Events
     event ItemCreated(address indexed owner, uint256 indexed id, string value);
     event ItemUpdated(address indexed owner, uint256 indexed id, string value);
     event ItemDeleted(address indexed owner, uint256 indexed id);
 
-    // Create
     function create(string memory _value) public returns (uint256) {
+        require(bytes(_value).length > 0, "Value cannot be empty");
+
         userItemCount[msg.sender]++;
         uint256 newId = userItemCount[msg.sender];
         items[msg.sender][newId] = _value;
+        itemExists[msg.sender][newId] = true;
+
         emit ItemCreated(msg.sender, newId, _value);
         return newId;
     }
 
-    // Read
     function read(uint256 _id) public view returns (string memory) {
-        require(
-            _id <= userItemCount[msg.sender] && _id > 0,
-            "Item does not exist"
-        );
+        require(itemExists[msg.sender][_id], "Item does not exist");
         return items[msg.sender][_id];
     }
 
-    // Update
     function update(uint256 _id, string memory _value) public {
-        require(
-            _id <= userItemCount[msg.sender] && _id > 0,
-            "Item does not exist"
-        );
+        require(itemExists[msg.sender][_id], "Item does not exist");
+        require(bytes(_value).length > 0, "Value cannot be empty");
+
         items[msg.sender][_id] = _value;
         emit ItemUpdated(msg.sender, _id, _value);
     }
 
-    // Delete
     function remove(uint256 _id) public {
-        require(
-            _id <= userItemCount[msg.sender] && _id > 0,
-            "Item does not exist"
-        );
+        require(itemExists[msg.sender][_id], "Item does not exist");
+
         delete items[msg.sender][_id];
+        delete itemExists[msg.sender][_id];
         emit ItemDeleted(msg.sender, _id);
     }
 
-    // Get user's total items count
-    function getCount() public view returns (uint256) {
-        return userItemCount[msg.sender];
-    }
+    function fetchAll()
+        public
+        view
+        returns (uint256[] memory, string[] memory)
+    {
+        uint256 itemCount = userItemCount[msg.sender];
+        uint256[] memory ids = new uint256[](itemCount);
+        string[] memory values = new string[](itemCount);
 
-    // Get item by owner and id
-    function getItemByOwner(
-        address _owner,
-        uint256 _id
-    ) public view returns (string memory) {
-        require(_id <= userItemCount[_owner] && _id > 0, "Item does not exist");
-        return items[_owner][_id];
-    }
-
-    // Get all items of the current user
-    function getMyItems() public view returns (string[] memory) {
-        uint256 count = userItemCount[msg.sender];
-        require(count > 0, "You have no items");
-
-        string[] memory userItems = new string[](count);
-        for (uint256 i = 1; i <= count; i++) {
-            userItems[i - 1] = items[msg.sender][i];
+        for (uint256 i = 0; i < itemCount; i++) {
+            uint256 id = i + 1;
+            if (itemExists[msg.sender][id]) {
+                ids[i] = id;
+                values[i] = items[msg.sender][id];
+            }
         }
-        return userItems;
+
+        return (ids, values);
     }
 }

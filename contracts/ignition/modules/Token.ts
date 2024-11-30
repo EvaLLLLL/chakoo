@@ -8,7 +8,7 @@ const TOKEN_NAME = 'Meow'
 const TOKEN_SYMBOL = 'MEOW'
 const TOTAL_SUPPLY = parseEther('100000000')
 
-const TokenModule = buildModule('Token', (m) => {
+const TokenModule = buildModule('TokenModule', (m) => {
   const token = m.contract('Token', [TOKEN_NAME, TOKEN_SYMBOL, TOTAL_SUPPLY])
 
   return { token }
