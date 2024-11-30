@@ -1,34 +1,34 @@
-import { Button, Card, Status } from '@repo/ui'
-import { formatEther } from 'viem'
+import { Button, Card, Status } from "@repo/ui";
+import { formatEther } from "viem";
 import {
   useAccount,
   useBalance,
   useChainId,
   useConnect,
   useDisconnect,
-  useSwitchChain
-} from 'wagmi'
-import { injected } from 'wagmi/connectors'
+  useSwitchChain,
+} from "wagmi";
+import { injected } from "wagmi/connectors";
 
 export const WalletConnection: React.FC = () => {
-  const chainId = useChainId()
-  const { address, isConnecting, isReconnecting, isConnected } = useAccount()
-  const { chains, switchChain, isPending: isSwitching } = useSwitchChain()
-  const { connect } = useConnect()
-  const { disconnect } = useDisconnect()
+  const chainId = useChainId();
+  const { address, isConnecting, isReconnecting, isConnected } = useAccount();
+  const { chains, switchChain, isPending: isSwitching } = useSwitchChain();
+  const { connect } = useConnect();
+  const { disconnect } = useDisconnect();
   const { data: nativeBalance } = useBalance({
     address,
-    query: { select: (v) => formatEther(v.value) || '-' }
-  })
+    query: { select: (v) => formatEther(v.value) || "-" },
+  });
 
-  const chain = chains.find((c) => c.id === chainId)
+  const chain = chains.find((c) => c.id === chainId);
 
   const status =
     isConnecting || isReconnecting
-      ? 'connecting'
+      ? "connecting"
       : isConnected
-        ? 'online'
-        : 'offline'
+        ? "online"
+        : "offline";
 
   return (
     <Card title="Wallet Connection">
@@ -51,13 +51,15 @@ export const WalletConnection: React.FC = () => {
             {isConnected ? (
               <Button
                 disabled={isConnecting || isReconnecting}
-                onClick={() => disconnect()}>
+                onClick={() => disconnect()}
+              >
                 Disconnect
               </Button>
             ) : (
               <Button
                 disabled={isConnecting || isReconnecting}
-                onClick={() => connect({ connector: injected() })}>
+                onClick={() => connect({ connector: injected() })}
+              >
                 Connect
               </Button>
             )}
@@ -69,7 +71,8 @@ export const WalletConnection: React.FC = () => {
                 key={c.id}
                 disabled={isSwitching}
                 onClick={() => switchChain({ chainId: c.id })}
-                className="flex items-center gap-x-1">
+                className="flex items-center gap-x-1"
+              >
                 {c.id === chainId && <Status status="online" />}
                 {c.name}
               </Button>
@@ -78,5 +81,5 @@ export const WalletConnection: React.FC = () => {
         </div>
       </div>
     </Card>
-  )
-}
+  );
+};

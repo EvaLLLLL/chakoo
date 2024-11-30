@@ -1,6 +1,6 @@
-import { StorageCURD } from '@/components/StorageCURD'
-import { TokenTransaction } from '@/components/TokenTransaction'
-import { WalletConnection } from '@/components/WalletConnection'
+import { StorageCURD } from "@/components/StorageCURD";
+import { TokenTransaction } from "@/components/TokenTransaction";
+import { WalletConnection } from "@/components/WalletConnection";
 
 function App() {
   return (
@@ -9,7 +9,7 @@ function App() {
       <TokenTransaction />
       <StorageCURD />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

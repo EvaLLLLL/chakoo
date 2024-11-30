@@ -2,67 +2,67 @@ import {
   useAccount,
   useToken,
   useWaitForTransactionReceipt,
-  useWriteContract
-} from 'wagmi'
-import { CONTRACT_ADDRESSES } from '@/config/address'
-import { useReadTokenBalanceOf } from '@/hooks/contracts/token'
-import { Address, formatEther, Hash, isHash } from 'viem'
-import { faucetAbi, useReadFaucetGetBalance } from '@/hooks/contracts/faucet'
-import { useEffect, useState } from 'react'
-import { Button, Card, Status } from '@repo/ui'
+  useWriteContract,
+} from "wagmi";
+import { CONTRACT_ADDRESSES } from "@/config/address";
+import { useReadTokenBalanceOf } from "@/hooks/contracts/token";
+import { Address, formatEther, Hash, isHash } from "viem";
+import { faucetAbi, useReadFaucetGetBalance } from "@/hooks/contracts/faucet";
+import { useEffect, useState } from "react";
+import { Button, Card, Status } from "@repo/ui";
 
 export const TokenTransaction: React.FC = () => {
-  const { address } = useAccount()
+  const { address } = useAccount();
   const { data: tokenInfo } = useToken({
-    address: CONTRACT_ADDRESSES.TOKEN
-  })
+    address: CONTRACT_ADDRESSES.TOKEN,
+  });
   const { data: balance, refetch: refetchBalance } = useReadTokenBalanceOf({
     address: CONTRACT_ADDRESSES.TOKEN,
     args: [address as Address],
-    query: { select: (v) => formatEther(v) }
-  })
+    query: { select: (v) => formatEther(v) },
+  });
 
   const { data: tokenBalance, refetch: refetchTokenBalance } =
     useReadFaucetGetBalance({
       address: CONTRACT_ADDRESSES.FAUCET,
-      query: { select: (v) => formatEther(v) }
-    })
+      query: { select: (v) => formatEther(v) },
+    });
 
-  const [isProcessing, setIsProcessing] = useState(false)
-  const [txId, setTxId] = useState<Hash>()
-  const { writeContractAsync } = useWriteContract()
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [txId, setTxId] = useState<Hash>();
+  const { writeContractAsync } = useWriteContract();
 
   const { data: requestTokensTxnStatus, isFetching: isWaitingTxn } =
     useWaitForTransactionReceipt({
       hash: txId as Hash,
-      query: { enabled: isHash(txId as Hash), select: (v) => v.status }
-    })
+      query: { enabled: isHash(txId as Hash), select: (v) => v.status },
+    });
 
   useEffect(() => {
-    if (txId && requestTokensTxnStatus === 'success') {
-      refetchBalance()
-      refetchTokenBalance()
-      setTxId(undefined)
+    if (txId && requestTokensTxnStatus === "success") {
+      refetchBalance();
+      refetchTokenBalance();
+      setTxId(undefined);
     }
-  }, [refetchBalance, refetchTokenBalance, requestTokensTxnStatus, txId])
+  }, [refetchBalance, refetchTokenBalance, requestTokensTxnStatus, txId]);
 
   const requestTokens = async () => {
     if (address && !isProcessing) {
       try {
-        setIsProcessing(true)
+        setIsProcessing(true);
         const txId = await writeContractAsync({
           abi: faucetAbi,
           address: CONTRACT_ADDRESSES.FAUCET,
-          functionName: 'requestTokens'
-        })
-        setTxId(txId)
+          functionName: "requestTokens",
+        });
+        setTxId(txId);
       } catch (e) {
-        console.error(e)
+        console.error(e);
       } finally {
-        setIsProcessing(false)
+        setIsProcessing(false);
       }
     }
-  }
+  };
 
   return (
     <Card title="Token Transaction">
@@ -80,12 +80,13 @@ export const TokenTransaction: React.FC = () => {
           <Button
             className="flex items-center gap-x-2"
             disabled={isProcessing || isWaitingTxn}
-            onClick={requestTokens}>
+            onClick={requestTokens}
+          >
             {(isProcessing || isWaitingTxn) && <Status status="connecting" />}
             <span>Request 50 {tokenInfo?.symbol}</span>
           </Button>
         </div>
       </div>
     </Card>
-  )
-}
+  );
+};

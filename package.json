@@ -6,7 +6,8 @@
     "dev": "concurrently -n \"UI,APP\" -c \"blue,green\" \"pnpm --filter ui dev\" \"pnpm --filter app dev\"",
     "build": "pnpm --filter ui build && pnpm --filter app build",
     "preview": "pnpm --filter app preview",
-    "lint": "pnpm --filter app --filter ui lint"
+    "lint": "pnpm --filter app --filter ui lint",
+    "lint:fix": "pnpm --filter app --filter ui lint:fix"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm run lint",
