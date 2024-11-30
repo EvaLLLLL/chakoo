@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "description": "",
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "postinstall": "npx simple-git-hooks",
     "dev": "concurrently -n \"UI,APP\" -c \"blue,green\" \"pnpm --filter ui dev\" \"pnpm --filter app dev\"",
     "build": "pnpm --filter ui build && pnpm --filter app build",
     "preview": "pnpm --filter app preview",
