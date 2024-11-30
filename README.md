@@ -42,7 +42,7 @@ packages/         # Shared packages
 
 ## Quick Start
 
-> [!NOTE]
+> [!IMPORTANT]
 > This project uses the `pnpm workspace` feature to manage the monorepo. Please do not use other tools like npm or yarn.
 
 ```sh
@@ -56,14 +56,29 @@ pnpm install
 pnpm run dev
 ```
 
+## Tech Stack
+
+- **pnpm**: [pnpm.io](https://pnpm.io) for package management and workspace features
+- **Vite**: [vitejs.dev](https://vitejs.dev) for development server and build tooling
+- **Tailwind CSS**: [tailwindcss.com](https://tailwindcss.com) for styling and UI
+- **React Query**: [react-query.tanstack.com](https://react-query.tanstack.com) for data fetching and caching
+- **Wagmi**: [wagmi.sh](https://wagmi.sh) for Web3 integration and wallet connection
+- **Solidity**: [soliditylang.org](https://soliditylang.org) for writing smart contracts
+- **Hardhat**: [hardhat.org](https://hardhat.org) for smart contract development and deployment
+- **ESLint**: [eslint.org](https://eslint.org) for code linting and quality control
+- **Prettier**: [prettier.io](https://prettier.io) for code formatting
+- **Commitlint**: [commitlint.js.org](https://commitlint.js.org) for commit message linting
+- **Simple Git Hooks**: [simple-git-hooks](https://github.com/simple-git-hooks) for Git hook management
+- **Docker**: [docker.com](https://docker.com) for containerization and deployment
+
 ## Development Guide
 
 ### Contract Interaction
 
-Generate React hooks from contract ABIs:
-
 ```sh
 cd app
+
+# Generate React hooks from contract ABIs
 pnpm run generate
 ```
 
