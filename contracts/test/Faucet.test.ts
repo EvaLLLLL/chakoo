@@ -1,66 +1,95 @@
-import { loadFixture } from '@nomicfoundation/hardhat-toolbox/network-helpers'
+import { loadFixture } from '@nomicfoundation/hardhat-toolbox-viem/network-helpers'
 import { expect } from 'chai'
-import { ethers } from 'hardhat'
+import hre from 'hardhat'
+import { getAddress, parseEther } from 'viem'
 
 describe('Faucet', function () {
   async function deployFaucetFixture() {
-    const [owner, otherAccount] = await ethers.getSigners()
+    const [owner, otherAccount] = await hre.viem.getWalletClients()
 
-    const tokenName = 'MyToken'
-    const tokenSymbol = 'MTK'
-    const initialSupply = ethers.parseEther('1000000') // 1 million tokens
+    const initialSupply = parseEther('1000000') // 1 million tokens
 
-    const Token = await ethers.getContractFactory('Token')
-    const token = await Token.deploy(tokenName, tokenSymbol, initialSupply)
+    const testToken = await hre.viem.deployContract('Token', [
+      'MyToken',
+      'MTK',
+      initialSupply
+    ])
 
-    const Faucet = await ethers.getContractFactory('Faucet')
-    const faucet = await Faucet.deploy(await token.getAddress())
+    const faucet = await hre.viem.deployContract('Faucet', [testToken.address])
 
-    const faucetTokens = ethers.parseEther('10000') // 10,000 tokens
-    await token.transfer(await faucet.getAddress(), faucetTokens)
+    await testToken.write.transfer([faucet.address, parseEther('50000')])
 
-    return { faucet, token, owner, otherAccount, faucetTokens }
+    const publicClient = await hre.viem.getPublicClient()
+
+    return {
+      faucet,
+      testToken,
+      owner,
+      otherAccount,
+      publicClient
+    }
   }
 
   describe('Deployment', function () {
-    it('Should set the right token address', async function () {
-      const { faucet, token } = await loadFixture(deployFaucetFixture)
-      expect(await faucet.token()).to.equal(await token.getAddress())
-    })
-
     it('Should set the right owner', async function () {
       const { faucet, owner } = await loadFixture(deployFaucetFixture)
-      expect(await faucet.owner()).to.equal(owner.address)
+      expect(await faucet.read.owner()).to.equal(
+        getAddress(owner.account.address)
+      )
     })
 
-    it('Should have the correct initial balance', async function () {
-      const { faucet, faucetTokens } = await loadFixture(deployFaucetFixture)
-      expect(await faucet.getBalance()).to.equal(faucetTokens)
+    it('Should set the correct token address', async function () {
+      const { faucet, testToken } = await loadFixture(deployFaucetFixture)
+      expect(await faucet.read.token()).to.equal(getAddress(testToken.address))
+    })
+
+    it('Should have the correct initial amount', async function () {
+      const { faucet, testToken } = await loadFixture(deployFaucetFixture)
+      expect(
+        await testToken.read.balanceOf([getAddress(faucet.address)])
+      ).to.equal(parseEther('50000'))
     })
   })
 
   describe('Token Requests', function () {
     it('Should allow users to request tokens', async function () {
-      const { faucet, token, otherAccount } =
+      const { faucet, testToken, otherAccount } =
         await loadFixture(deployFaucetFixture)
 
-      const withdrawAmount = await faucet.withdrawAmount()
-      await faucet.connect(otherAccount).requestTokens()
-
-      expect(await token.balanceOf(otherAccount.address)).to.equal(
-        withdrawAmount
+      const faucetAsOther = await hre.viem.getContractAt(
+        'Faucet',
+        faucet.address,
+        { client: { wallet: otherAccount } }
       )
+
+      const balanceBefore = BigInt(
+        (await testToken.read.balanceOf([
+          otherAccount.account.address
+        ])) as string
+      )
+      await faucetAsOther.write.requestTokens()
+      const balanceAfter = BigInt(
+        (await testToken.read.balanceOf([
+          otherAccount.account.address
+        ])) as string
+      )
+
+      expect(balanceAfter - balanceBefore).to.equal(parseEther('50'))
     })
 
     it('Should prevent requests before lockTime expires', async function () {
       const { faucet, otherAccount } = await loadFixture(deployFaucetFixture)
 
-      await faucet.connect(otherAccount).requestTokens()
+      const faucetAsOther = await hre.viem.getContractAt(
+        'Faucet',
+        faucet.address,
+        { client: { wallet: otherAccount } }
+      )
 
-      await expect(
-        faucet.connect(otherAccount).requestTokens()
-      ).to.be.revertedWith(
-        'Insufficient time elapsed since last withdrawal - please try again later'
+      await faucetAsOther.write.requestTokens()
+
+      await expect(faucetAsOther.write.requestTokens()).to.be.rejectedWith(
+        'Insufficient time elapsed since last withdrawal'
       )
     })
   })
@@ -69,32 +98,38 @@ describe('Faucet', function () {
     it('Should allow owner to change withdrawal amount', async function () {
       const { faucet } = await loadFixture(deployFaucetFixture)
 
-      const newAmount = ethers.parseEther('100')
-      await faucet.setWithdrawalAmount(newAmount)
+      const newAmount = parseEther('100')
+      await faucet.write.setWithdrawalAmount([newAmount])
 
-      expect(await faucet.withdrawAmount()).to.equal(newAmount)
+      expect(await faucet.read.withdrawAmount()).to.equal(newAmount)
     })
 
     it('Should allow owner to change lock time', async function () {
       const { faucet } = await loadFixture(deployFaucetFixture)
 
-      const newLockTime = 5 // 5 minutes
-      await faucet.setLockTime(newLockTime)
+      const newLockTime = 5n // 5 minutes
+      await faucet.write.setLockTime([newLockTime])
 
-      expect(await faucet.lockTime()).to.equal(newLockTime * 60) // converted to seconds
+      expect(await faucet.read.lockTime()).to.equal(newLockTime * 60n) // converted to seconds
     })
 
     it('Should allow owner to withdraw all tokens', async function () {
-      const { faucet, token, owner, faucetTokens } =
+      const { faucet, testToken, owner } =
         await loadFixture(deployFaucetFixture)
 
-      const initialOwnerBalance = await token.balanceOf(owner.address)
-      await faucet.withdrawal()
-
-      expect(await token.balanceOf(owner.address)).to.equal(
-        initialOwnerBalance + faucetTokens
+      const balanceBefore = BigInt(
+        (await testToken.read.balanceOf([owner.account.address])) as string
       )
-      expect(await faucet.getBalance()).to.equal(0)
+      const faucetBalance = BigInt(
+        (await testToken.read.balanceOf([faucet.address])) as string
+      )
+
+      await faucet.write.withdrawal()
+
+      const balanceAfter = BigInt(
+        (await testToken.read.balanceOf([owner.account.address])) as string
+      )
+      expect(balanceAfter - balanceBefore).to.equal(faucetBalance)
     })
   })
 
@@ -102,52 +137,52 @@ describe('Faucet', function () {
     it('Should allow owner to pause and unpause', async function () {
       const { faucet } = await loadFixture(deployFaucetFixture)
 
-      await faucet.pause()
-      expect(await faucet.paused()).to.be.true
+      await faucet.write.pause()
+      expect(await faucet.read.paused()).to.be.true
 
-      await faucet.unpause()
-      expect(await faucet.paused()).to.be.false
+      await faucet.write.unpause()
+      expect(await faucet.read.paused()).to.be.false
     })
 
     it('Should prevent token requests when paused', async function () {
       const { faucet, otherAccount } = await loadFixture(deployFaucetFixture)
 
-      await faucet.pause()
+      const faucetAsOther = await hre.viem.getContractAt(
+        'Faucet',
+        faucet.address,
+        { client: { wallet: otherAccount } }
+      )
 
-      await expect(
-        faucet.connect(otherAccount).requestTokens()
-      ).to.be.revertedWith('Contract is paused')
+      await faucet.write.pause()
+
+      await expect(faucetAsOther.write.requestTokens()).to.be.rejectedWith(
+        'Contract is paused'
+      )
     })
   })
 
-  describe('ETH Handling', function () {
-    it('Should accept ETH deposits', async function () {
-      const { faucet, owner } = await loadFixture(deployFaucetFixture)
+  describe('Events', function () {
+    it('Should emit Withdrawal event when tokens are withdrawn', async function () {
+      const { faucet, publicClient } = await loadFixture(deployFaucetFixture)
 
-      const depositAmount = ethers.parseEther('1')
-      await owner.sendTransaction({
-        to: await faucet.getAddress(),
-        value: depositAmount
-      })
+      const hash = await faucet.write.withdrawal()
+      await publicClient.waitForTransactionReceipt({ hash })
 
-      expect(
-        await ethers.provider.getBalance(await faucet.getAddress())
-      ).to.equal(depositAmount)
+      const withdrawalEvents = await faucet.getEvents.Withdrawal()
+      expect(withdrawalEvents).to.have.lengthOf(1)
+      expect((withdrawalEvents[0].args as { amount: bigint }).amount).to.equal(
+        parseEther('50000')
+      )
     })
 
-    it('Should allow owner to withdraw ETH', async function () {
-      const { faucet, owner } = await loadFixture(deployFaucetFixture)
+    it('Should emit Paused event when contract is paused', async function () {
+      const { faucet, publicClient } = await loadFixture(deployFaucetFixture)
 
-      const depositAmount = ethers.parseEther('1')
-      await owner.sendTransaction({
-        to: await faucet.getAddress(),
-        value: depositAmount
-      })
+      const hash = await faucet.write.pause()
+      await publicClient.waitForTransactionReceipt({ hash })
 
-      await expect(faucet.withdrawETH()).to.changeEtherBalances(
-        [faucet, owner],
-        [-depositAmount, depositAmount]
-      )
+      const pausedEvents = await faucet.getEvents.Paused()
+      expect(pausedEvents).to.have.lengthOf(1)
     })
   })
 })

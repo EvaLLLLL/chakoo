@@ -1,5 +1,5 @@
-import { HardhatUserConfig } from 'hardhat/config'
-import '@nomicfoundation/hardhat-toolbox'
+import type { HardhatUserConfig } from 'hardhat/config'
+import '@nomicfoundation/hardhat-toolbox-viem'
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -18,9 +18,6 @@ const config: HardhatUserConfig = {
       url: 'https://ethereum-sepolia-rpc.publicnode.com',
       accounts: [process.env.PRIVATE_KEY!]
     }
-  },
-  gasReporter: {
-    enabled: true
   }
 }
 

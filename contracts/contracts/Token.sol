@@ -24,6 +24,10 @@ contract Token is ERC20Capped, ERC20Burnable, Ownable {
     }
 
     function mint(address to, uint256 amount) public onlyOwner {
-        _mint(to, amount);
+        require(
+            ERC20.totalSupply() + amount <= cap(),
+            "ERC20Capped: cap exceeded"
+        );
+        super._mint(to, amount);
     }
 }

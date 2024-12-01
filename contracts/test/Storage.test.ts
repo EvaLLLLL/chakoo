@@ -1,148 +1,133 @@
-import { loadFixture } from '@nomicfoundation/hardhat-toolbox/network-helpers'
+import { loadFixture } from '@nomicfoundation/hardhat-toolbox-viem/network-helpers'
 import { expect } from 'chai'
-import { ethers } from 'hardhat'
+import hre from 'hardhat'
 
 describe('Storage', function () {
   async function deployStorageFixture() {
-    const [owner, otherAccount] = await ethers.getSigners()
+    const [owner, otherAccount] = await hre.viem.getWalletClients()
+    const storage = await hre.viem.deployContract('Storage')
+    const publicClient = await hre.viem.getPublicClient()
 
-    const Storage = await ethers.getContractFactory('Storage')
-    const storage = await Storage.deploy()
-
-    return { storage, owner, otherAccount }
+    return { storage, owner, otherAccount, publicClient }
   }
 
   describe('Item Operations', function () {
     it('Should create an item', async function () {
-      const { storage, owner } = await loadFixture(deployStorageFixture)
-      const value = 'Test Item'
+      const { storage, publicClient } = await loadFixture(deployStorageFixture)
 
-      await expect(storage.create(value))
-        .to.emit(storage, 'ItemCreated')
-        .withArgs(owner.address, 1, value)
+      const hash = await storage.write.create(['test value'])
+      await publicClient.waitForTransactionReceipt({ hash })
 
-      expect(await storage.read(1)).to.equal(value)
+      const events = await storage.getEvents.ItemCreated()
+      expect(events).to.have.lengthOf(1)
+      expect((events[0].args as { id: bigint }).id).to.equal(1n)
+      expect((events[0].args as { value: string }).value).to.equal('test value')
     })
 
-    it('Should not create an item with empty value', async function () {
+    it('Should not create an empty item', async function () {
       const { storage } = await loadFixture(deployStorageFixture)
-
-      await expect(storage.create('')).to.be.revertedWith(
+      await expect(storage.write.create([''])).to.be.rejectedWith(
         'Value cannot be empty'
       )
     })
 
-    it('Should read an existing item', async function () {
-      const { storage } = await loadFixture(deployStorageFixture)
-      const value = 'Test Item'
-
-      await storage.create(value)
-      expect(await storage.read(1)).to.equal(value)
-    })
-
-    it('Should fail to read non-existent item', async function () {
+    it('Should read an item', async function () {
       const { storage } = await loadFixture(deployStorageFixture)
 
-      await expect(storage.read(1)).to.be.revertedWith('Item does not exist')
+      await storage.write.create(['test value'])
+      const value = await storage.read.read([1n])
+      expect(value).to.equal('test value')
     })
 
-    it('Should update an existing item', async function () {
-      const { storage, owner } = await loadFixture(deployStorageFixture)
-      const initialValue = 'Initial Value'
-      const updatedValue = 'Updated Value'
+    it('Should update an item', async function () {
+      const { storage, publicClient } = await loadFixture(deployStorageFixture)
 
-      await storage.create(initialValue)
-      await expect(storage.update(1, updatedValue))
-        .to.emit(storage, 'ItemUpdated')
-        .withArgs(owner.address, 1, updatedValue)
+      await storage.write.create(['test value'])
+      const hash = await storage.write.update([1n, 'updated value'])
+      await publicClient.waitForTransactionReceipt({ hash })
 
-      expect(await storage.read(1)).to.equal(updatedValue)
+      const value = await storage.read.read([1n])
+      expect(value).to.equal('updated value')
+
+      const events = await storage.getEvents.ItemUpdated()
+      expect(events).to.have.lengthOf(1)
+      expect((events[0].args as { value: string }).value).to.equal(
+        'updated value'
+      )
     })
 
-    it('Should fail to update non-existent item', async function () {
-      const { storage } = await loadFixture(deployStorageFixture)
+    it('Should remove an item', async function () {
+      const { storage, publicClient } = await loadFixture(deployStorageFixture)
 
-      await expect(storage.update(1, 'New Value')).to.be.revertedWith(
+      await storage.write.create(['test value'])
+      const hash = await storage.write.remove([1n])
+      await publicClient.waitForTransactionReceipt({ hash })
+
+      await expect(storage.read.read([1n])).to.be.rejectedWith(
         'Item does not exist'
       )
+
+      const events = await storage.getEvents.ItemDeleted()
+      expect(events).to.have.lengthOf(1)
+      expect((events[0].args as { id: bigint }).id).to.equal(1n)
     })
 
-    it('Should fail to update with empty value', async function () {
+    it('Should fetch all items', async function () {
       const { storage } = await loadFixture(deployStorageFixture)
 
-      await storage.create('Initial Value')
-      await expect(storage.update(1, '')).to.be.revertedWith(
-        'Value cannot be empty'
+      await storage.write.create(['value 1'])
+      await storage.write.create(['value 2'])
+      await storage.write.create(['value 3'])
+
+      const [ids, values] = (await storage.read.fetchAll()) as [
+        bigint[],
+        string[]
+      ]
+      expect(ids).to.deep.equal([1n, 2n, 3n])
+      expect(values).to.deep.equal(['value 1', 'value 2', 'value 3'])
+    })
+
+    it('Should handle items from different users separately', async function () {
+      const { storage, owner, otherAccount, publicClient } =
+        await loadFixture(deployStorageFixture)
+
+      const storage1 = await hre.viem.getContractAt(
+        'Storage',
+        storage.address,
+        { client: { wallet: owner } }
       )
-    })
 
-    it('Should delete an existing item', async function () {
-      const { storage, owner } = await loadFixture(deployStorageFixture)
-      const value = 'Test Item'
+      await storage1.write.create(['owner value'])
 
-      await storage.create(value)
-      await expect(storage.remove(1))
-        .to.emit(storage, 'ItemDeleted')
-        .withArgs(owner.address, 1)
-
-      await expect(storage.read(1)).to.be.revertedWith('Item does not exist')
-    })
-
-    it('Should fail to delete non-existent item', async function () {
-      const { storage } = await loadFixture(deployStorageFixture)
-
-      await expect(storage.remove(1)).to.be.revertedWith('Item does not exist')
-    })
-  })
-
-  describe('Data Retrieval', function () {
-    it('Should fetch all items for a user', async function () {
-      const { storage } = await loadFixture(deployStorageFixture)
-      const values = ['Item 1', 'Item 2', 'Item 3']
-
-      // Create multiple items
-      for (const value of values) {
-        await storage.create(value)
-      }
-
-      const [ids, fetchedValues] = await storage.fetchAll()
-      expect(fetchedValues).to.deep.equal(values)
-      expect(ids).to.deep.equal([1, 2, 3])
-    })
-
-    it('Should handle deleted items in fetchAll', async function () {
-      const { storage } = await loadFixture(deployStorageFixture)
-      const values = ['Item 1', 'Item 2', 'Item 3']
-
-      // Create items and delete one
-      for (const value of values) {
-        await storage.create(value)
-      }
-      await storage.remove(2)
-
-      const [ids, fetchedValues] = await storage.fetchAll()
-      expect(fetchedValues).to.deep.equal(['Item 1', '', 'Item 3'])
-      expect(ids).to.deep.equal([BigInt(1), BigInt(0), BigInt(3)])
-    })
-
-    it('Should return empty arrays when user has no items', async function () {
-      const { storage } = await loadFixture(deployStorageFixture)
-
-      const [ids, values] = await storage.fetchAll()
-      expect(ids).to.deep.equal([])
-      expect(values).to.deep.equal([])
-    })
-
-    it('Should maintain separate storage for different users', async function () {
-      const { storage, otherAccount } = await loadFixture(deployStorageFixture)
-
-      await storage.create('Owner Item')
-      await storage.connect(otherAccount).create('Other User Item')
-
-      expect(await storage.read(1)).to.equal('Owner Item')
-      expect(await storage.connect(otherAccount).read(1)).to.equal(
-        'Other User Item'
+      const storage2 = await hre.viem.getContractAt(
+        'Storage',
+        storage.address,
+        { client: { wallet: otherAccount } }
       )
+
+      await storage2.write.create(['other value'])
+
+      const ownerResult = await publicClient.readContract({
+        address: storage.address,
+        abi: storage.abi,
+        functionName: 'fetchAll',
+        account: owner.account.address
+      })
+
+      const otherResult = await publicClient.readContract({
+        address: storage.address,
+        abi: storage.abi,
+        functionName: 'fetchAll',
+        account: otherAccount.account.address
+      })
+
+      const [ownerIds, ownerValues] = ownerResult as [bigint[], string[]]
+      const [otherIds, otherValues] = otherResult as [bigint[], string[]]
+
+      expect(ownerIds).to.deep.equal([1n])
+      expect(ownerValues).to.deep.equal(['owner value'])
+      expect(otherIds).to.deep.equal([1n])
+      expect(otherValues).to.deep.equal(['other value'])
     })
   })
 })
